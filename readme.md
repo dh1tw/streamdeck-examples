@@ -1,3 +1,9 @@
+![Build Status](https://github.com/dh1tw/streamdeck-examples/workflows/Cross%20Platform%20build/badge.svg?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dh1tw/streamdeck-examples)](https://goreportcard.com/report/github.com/dh1tw/streamdeck-examples)
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+[![GoDoc](https://godoc.org/github.com/dh1tw/streamdeck?status.svg)](https://godoc.org/github.com/dh1tw/streamdeck)
+
+
 This repository contains a demo application with several examples on how the golang [streamdeck](https://github.com/dh1tw/streamdeck) driver could be used.
 
 ## Install

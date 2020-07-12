@@ -25,8 +25,8 @@ github.com/dh1tw/hid v1.0.1-0.20190713013040-4404f3fb150e h1:fNI5M7e7lRCiPrtN+5Q
 github.com/dh1tw/hid v1.0.1-0.20190713013040-4404f3fb150e/go.mod h1:kUgXECVdERQdVezpoEVXDX9Ijjl1ZLDrixDaINDaSMw=
 github.com/dh1tw/streamdeck v0.1.0 h1:0WlF4EMYmhDMa2eVX0jMRITIFx0HHmFT88RkPyqoAkk=
 github.com/dh1tw/streamdeck v0.1.0/go.mod h1:iggD2c1RMjYX5jFz9O02LopTnp0CVHvYOkvPg4Cxz8M=
-github.com/dh1tw/streamdeck-buttons v0.0.0-20200711012229-eddc08440db4 h1:6e3pbftFOGQyFyan45kp3E34vB5ALUu1rz9A1Vm6en0=
-github.com/dh1tw/streamdeck-buttons v0.0.0-20200711012229-eddc08440db4/go.mod h1:bfGlGKs580mN/rdz2kVETWE5tORgixSxsz6z1q0R4oI=
+github.com/dh1tw/streamdeck-buttons v0.1.1 h1:nqdwFw+R98ws3vIPGDddOEq21Gl92TpYIE2XBIG9zXc=
+github.com/dh1tw/streamdeck-buttons v0.1.1/go.mod h1:EvaR21Q4rWeO5cH7716BVNQaOgKL7JhILASwmDReB+M=
 github.com/disintegration/gift v1.2.1 h1:Y005a1X4Z7Uc+0gLpSAsKhWi4qLtsdEcMIbbdvdZ6pc=
 github.com/disintegration/gift v1.2.1/go.mod h1:Jh2i7f7Q2BM7Ezno3PhfezbR1xpUg9dUg3/RlKGr4HI=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=

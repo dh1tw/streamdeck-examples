@@ -11,9 +11,9 @@ var cfgFile string
 
 // RootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "examples",
-	Short: "streamdeck examples",
-	Long:  `streamdeck examples`,
+	Use:   "",
+	Short: "This is a demo application for the golang streamdeck driver",
+	Long:  `This is a demo application for the golang streamdeck driver`,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.

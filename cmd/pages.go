@@ -15,8 +15,8 @@ import (
 
 var pagesCmd = &cobra.Command{
 	Use:   "pages",
-	Short: "custom pages with navigation",
-	Long:  `custom pages with navigation`,
+	Short: "Custom nested pages with navigation",
+	Long:  `Custom nested pages with navigation`,
 	Run:   pages,
 }
 

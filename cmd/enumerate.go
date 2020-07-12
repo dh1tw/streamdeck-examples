@@ -12,7 +12,7 @@ import (
 
 var enumerateCmd = &cobra.Command{
 	Use:   "enumerate",
-	Short: "enumerate connected streamdecks",
+	Short: "enumerate all connected Stream Decks",
 	Long:  `This program enumerates all Corsair/Elgato Stream Decks connected to this computer.`,
 	Run:   enumerate,
 }

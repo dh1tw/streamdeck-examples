@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -20,7 +21,7 @@ var labelsCmd = &cobra.Command{
 	Use:   "labels",
 	Short: "show a bunch of labeled icons on the streamdeck",
 	Long: `This example will instantiate 15 labels on the streamdeck. Each Label
-is setup as a counter which will increment every 50ms. If a button is
+is setup as a counter which will increment every 100ms. If a button is
 pressed it will be colored blue until it is released.`,
 	Run: labels,
 }
@@ -30,6 +31,9 @@ func init() {
 }
 
 func labels(cmd *cobra.Command, args []string) {
+
+	var mu sync.Mutex
+
 	sd, err := sdeck.NewStreamDeck()
 	if err != nil {
 		log.Panic(err)
@@ -49,18 +53,22 @@ func labels(cmd *cobra.Command, args []string) {
 
 	handleBtnEvents := func(btnIndex int, state sdeck.BtnState) {
 		fmt.Printf("Button: %d, %s\n", btnIndex, state)
+		mu.Lock()
+		defer mu.Unlock()
 		if state == sdeck.BtnPressed {
 			col := color.RGBA{0, 0, 153, 0}
 			labels[btnIndex].SetBgColor(image.NewUniform(col))
+			labels[btnIndex].Draw()
 		} else { // must be BtnReleased
 			col := color.RGBA{0, 0, 0, 255}
 			labels[btnIndex].SetBgColor(image.NewUniform(col))
+			labels[btnIndex].Draw()
 		}
 	}
 
 	sd.SetBtnEventCb(handleBtnEvents)
 
-	ticker := time.NewTicker(time.Millisecond * 50)
+	ticker := time.NewTicker(time.Millisecond * 100)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
@@ -73,7 +81,10 @@ func labels(cmd *cobra.Command, args []string) {
 			return
 		case <-ticker.C:
 			for i := 0; i < 15; i++ {
+				mu.Lock()
 				labels[i].SetText(fmt.Sprintf("%03d", counter))
+				labels[i].Draw()
+				mu.Unlock()
 			}
 			counter++
 		}

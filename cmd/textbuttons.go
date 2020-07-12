@@ -16,8 +16,8 @@ import (
 
 var textbtnsCmd = &cobra.Command{
 	Use:   "textbuttons",
-	Short: "buttons with custom text",
-	Long:  `buttons with custom text`,
+	Short: "just buttons with custom text",
+	Long:  `just buttons with custom text`,
 	Run:   textbtns,
 }
 

@@ -10,7 +10,7 @@ This repository contains a demo application with several examples on how the gol
 
 You can either grab a copy of the pre-compiled binary from the [releases page](https://github.com/dh1tw/streamdeck-examples/releases) or compile the program locally on your machine.
 
-```golang
+```bash
 
 $ mkdir -p $HOME/go/src/github.com/dh1tw && cd $HOME/go/src/github.com/dh1tw
 $ git clone https://github.com/dh1tw/streamdeck-examples.git

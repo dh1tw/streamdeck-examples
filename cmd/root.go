@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"os"
 
@@ -9,11 +10,16 @@ import (
 
 var cfgFile string
 
+//go:embed assets
+var assetDirectory embed.FS
+
 // RootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "",
-	Short: "This is a demo application for the golang streamdeck driver",
-	Long:  `This is a demo application for the golang streamdeck driver`,
+	Short: "This application contains several demos for the golang stream deck driver",
+	Long: `This application contains several demos for the golang stream deck driver
+which is being developed at https://github.com/dh1tw/streamdeck.
+`,
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
@@ -26,5 +32,5 @@ func Execute() {
 }
 
 func init() {
-	// cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().StringP("device", "d", "", "Serial Number of stream deck to be used")
 }

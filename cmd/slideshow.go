@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bufio"
+	"fmt"
 	"image"
 	"log"
 	"os"
@@ -9,7 +10,6 @@ import (
 	"time"
 
 	sdeck "github.com/dh1tw/streamdeck"
-	"github.com/markbates/pkger"
 	"github.com/spf13/cobra"
 )
 
@@ -28,13 +28,25 @@ func init() {
 
 func slideshow(cmd *cobra.Command, args []string) {
 
-	sd, err := sdeck.NewStreamDeck()
+	var sd *sdeck.StreamDeck
+	var err error
+
+	sdSerial := rootCmd.Flag("device").Value.String()
+
+	if len(sdSerial) > 0 {
+		sd, err = sdeck.NewStreamDeck(sdSerial)
+	} else {
+		sd, err = sdeck.NewStreamDeck()
+	}
 	if err != nil {
-		log.Panic(err)
+		fmt.Println(err)
+		return
 	}
 	defer sd.ClearAllBtns()
 
-	_dices, err := pkger.Open("/assets/images/dices.png")
+	fmt.Println("using stream deck device with serial number", sd.Serial())
+
+	_dices, err := assetDirectory.Open("assets/images/dices.png")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +57,7 @@ func slideshow(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_dna, err := pkger.Open("/assets/images/dna.gif")
+	_dna, err := assetDirectory.Open("assets/images/dna.gif")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +68,7 @@ func slideshow(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_octocat, err := pkger.Open("/assets/images/octocat.jpg")
+	_octocat, err := assetDirectory.Open("assets/images/octocat.jpg")
 	if err != nil {
 		log.Fatal(err)
 	}

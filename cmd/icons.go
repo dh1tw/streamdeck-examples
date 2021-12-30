@@ -9,7 +9,6 @@ import (
 	"os/signal"
 
 	sdeck "github.com/dh1tw/streamdeck"
-	"github.com/markbates/pkger"
 	"github.com/spf13/cobra"
 )
 
@@ -27,13 +26,26 @@ func init() {
 }
 
 func icons(cmd *cobra.Command, args []string) {
-	sd, err := sdeck.NewStreamDeck()
+
+	var sd *sdeck.StreamDeck
+	var err error
+
+	sdSerial := rootCmd.Flag("device").Value.String()
+
+	if len(sdSerial) > 0 {
+		sd, err = sdeck.NewStreamDeck(sdSerial)
+	} else {
+		sd, err = sdeck.NewStreamDeck()
+	}
 	if err != nil {
-		log.Panic(err)
+		fmt.Println(err)
+		return
 	}
 	defer sd.ClearAllBtns()
 
-	_user, err := pkger.Open("/assets/images/user.png")
+	fmt.Println("using stream deck device with serial number", sd.Serial())
+
+	_user, err := assetDirectory.Open("assets/images/user.png")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -44,7 +56,7 @@ func icons(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_tux, err := pkger.Open("/assets/images/tux.png")
+	_tux, err := assetDirectory.Open("assets/images/tux.png")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -55,7 +67,7 @@ func icons(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_warning, err := pkger.Open("/assets/images/warning.png")
+	_warning, err := assetDirectory.Open("assets/images/warning.png")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -66,7 +78,7 @@ func icons(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_doctor, err := pkger.Open("/assets/images/doctor.png")
+	_doctor, err := assetDirectory.Open("assets/images/doctor.png")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -77,7 +89,7 @@ func icons(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_lightbulbOn, err := pkger.Open("/assets/images/lightbulb_on.png")
+	_lightbulbOn, err := assetDirectory.Open("assets/images/lightbulb_on.png")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -88,7 +100,7 @@ func icons(cmd *cobra.Command, args []string) {
 		log.Panic(err)
 	}
 
-	_lightbulbOff, err := pkger.Open("/assets/images/lightbulb_off.png")
+	_lightbulbOff, err := assetDirectory.Open("assets/images/lightbulb_off.png")
 	if err != nil {
 		log.Panic(err)
 	}

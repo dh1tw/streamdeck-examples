@@ -16,8 +16,8 @@ var ledbtnsCmd = &cobra.Command{
 	Use:   "ledbuttons",
 	Short: "show a bunch of buttons with status LED",
 	Long: `This example shows how to use the 'streamdeck/LedButton‘. It will
-enumerate all the buttons on the panel with their ID and with a green LED
-which can be activated / deactivated with a button press.`,
+enumerate all the buttons on the panel with their ID and with a red, yellow or 
+green LED which can be activated / deactivated with a button press.`,
 	Run: ledbtns,
 }
 
@@ -26,10 +26,23 @@ func init() {
 }
 
 func ledbtns(cmd *cobra.Command, args []string) {
-	sd, err := sdeck.NewStreamDeck()
-	if err != nil {
-		log.Panic(err)
+	var sd *sdeck.StreamDeck
+	var err error
+
+	sdSerial := rootCmd.Flag("device").Value.String()
+
+	if len(sdSerial) > 0 {
+		sd, err = sdeck.NewStreamDeck(sdSerial)
+	} else {
+		sd, err = sdeck.NewStreamDeck()
 	}
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer sd.ClearAllBtns()
+
+	fmt.Println("using stream deck device with serial number", sd.Serial())
 
 	defer sd.ClearAllBtns()
 
@@ -73,6 +86,9 @@ func ledbtns(cmd *cobra.Command, args []string) {
 		if state == sdeck.BtnPressed {
 			btn := btns[btnIndex]
 			btn.SetState(!btn.State())
+			if err := btn.Draw(); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 	sd.SetBtnEventCb(btnChangedCb)

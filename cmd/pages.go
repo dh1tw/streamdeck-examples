@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"image/color"
 	"log"
 	"os"
@@ -26,11 +27,23 @@ func init() {
 }
 
 func pages(cmd *cobra.Command, args []string) {
-	sd, err := sdeck.NewStreamDeck()
+	var sd *sdeck.StreamDeck
+	var err error
+
+	sdSerial := rootCmd.Flag("device").Value.String()
+
+	if len(sdSerial) > 0 {
+		sd, err = sdeck.NewStreamDeck(sdSerial)
+	} else {
+		sd, err = sdeck.NewStreamDeck()
+	}
 	if err != nil {
-		log.Panic(err)
+		fmt.Println(err)
+		return
 	}
 	defer sd.ClearAllBtns()
+
+	fmt.Println("using stream deck device with serial number", sd.Serial())
 
 	p := NewStackPage(sd, nil)
 	p.Draw()
@@ -66,8 +79,8 @@ func NewStackPage(sd *sdeck.StreamDeck, parent sdeck.Page) sdeck.Page {
 	sp := &stackPage{
 		sd:         sd,
 		parent:     parent,
-		btns:       make(map[int]*ledbutton.LedButton, 0),
-		rotators:   make(map[int]*label.Label, 0),
+		btns:       make(map[int]*ledbutton.LedButton),
+		rotators:   make(map[int]*label.Label),
 		stackState: make(map[int]bool),
 	}
 
@@ -106,7 +119,6 @@ func NewStackPage(sd *sdeck.StreamDeck, parent sdeck.Page) sdeck.Page {
 }
 
 func (sp *stackPage) SetActive(active bool) {
-	return
 }
 
 func (sp *stackPage) Set(btnIndex int, state sdeck.BtnState) sdeck.Page {
@@ -120,6 +132,9 @@ func (sp *stackPage) Set(btnIndex int, state sdeck.BtnState) sdeck.Page {
 		if state == sdeck.BtnPressed {
 			sp.stackState[btnIndex] = !sp.stackState[btnIndex]
 			btn.SetState(sp.stackState[btnIndex])
+			if err := btn.Draw(); err != nil {
+				log.Println(err)
+			}
 			return nil
 		}
 	}
@@ -132,10 +147,14 @@ func (sp *stackPage) Set(btnIndex int, state sdeck.BtnState) sdeck.Page {
 
 func (sp *stackPage) Draw() {
 	for _, btn := range sp.btns {
-		btn.Draw()
+		if err := btn.Draw(); err != nil {
+			log.Println(err)
+		}
 	}
 	for _, rot := range sp.rotators {
-		rot.Draw()
+		if err := rot.Draw(); err != nil {
+			log.Println(err)
+		}
 	}
 }
 

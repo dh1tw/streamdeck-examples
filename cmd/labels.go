@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"log"
 	"os"
 	"os/signal"
 	"strconv"
@@ -35,11 +34,23 @@ func labels(cmd *cobra.Command, args []string) {
 
 	var mu sync.Mutex
 
-	sd, err := sdeck.NewStreamDeck()
+	var sd *sdeck.StreamDeck
+	var err error
+
+	sdSerial := rootCmd.Flag("device").Value.String()
+
+	if len(sdSerial) > 0 {
+		sd, err = sdeck.NewStreamDeck(sdSerial)
+	} else {
+		sd, err = sdeck.NewStreamDeck()
+	}
 	if err != nil {
-		log.Panic(err)
+		fmt.Println(err)
+		return
 	}
 	defer sd.ClearAllBtns()
+
+	fmt.Println("using stream deck device with serial number", sd.Serial())
 
 	labels := make(map[int]*label.Label)
 
@@ -56,12 +67,18 @@ func labels(cmd *cobra.Command, args []string) {
 		fmt.Printf("Button: %d, %s\n", btnIndex, state)
 		mu.Lock()
 		defer mu.Unlock()
-		if state == sdeck.BtnPressed {
-			col := color.RGBA{0, 0, 153, 0}
+		switch state {
+
+		case sdeck.BtnPressed:
+			col := color.RGBA{0, 0, 153, 0} //blue
 			labels[btnIndex].SetBgColor(image.NewUniform(col))
 			labels[btnIndex].Draw()
-		} else { // must be BtnReleased
-			col := color.RGBA{0, 0, 0, 255}
+		case sdeck.BtnLongPressed:
+			col := color.RGBA{255, 255, 0, 0} //yellow
+			labels[btnIndex].SetBgColor(image.NewUniform(col))
+			labels[btnIndex].Draw()
+		case sdeck.BtnReleased:
+			col := color.RGBA{0, 0, 0, 255} //black
 			labels[btnIndex].SetBgColor(image.NewUniform(col))
 			labels[btnIndex].Draw()
 		}

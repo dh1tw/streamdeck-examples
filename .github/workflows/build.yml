@@ -14,27 +14,27 @@ jobs:
           - version: linux-armhf
             OS: linux
             ARCH: arm
+            LINUX_ARCH: armhf
           - version: linux-arm64
             OS: linux
             ARCH: arm64
+            LINUX_ARCH: arm64
           - version: linux-i386
             OS: linux
             ARCH: '386'
+            LINUX_ARCH: i386
           - version: linux-amd64
             OS: linux
             ARCH: amd64
+            LINUX_ARCH: amd64
     steps:
     - uses: actions/checkout@v1
       with:
         submodules: true
-    - name: Bundle assets with pkger
-      run: |
-        go get github.com/markbates/pkger/cmd/pkger
-        export PATH=/home/runner/go/bin:$PATH
-        pkger
     - name: Build binary for ${{ matrix.version }}
       run: |
-        GOARCH=${{ matrix.ARCH }} GOOS=${{ matrix.OS }} go build
+        docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp dh1tw/remoteaudio-xcompile:linux-armhf \
+        /bin/sh -c 'apt-get update && apt-get install -y libusb-1.0-0-dev:${{ LINUX_ARCH }} && go build'
     - name: Prepare build artifact for stashing
       run: |
         mkdir release
@@ -52,11 +52,6 @@ jobs:
     - uses: actions/checkout@v1
       with:
         submodules: true
-    - name: Bundle assets with pkger
-      run: |
-        go get github.com/markbates/pkger/cmd/pkger
-        export PATH=/System/Volumes/Data/Users/runner/go/bin:$PATH
-        pkger
     - name: Build binary for ${{ matrix.version }}
       run: |
         GOARCH=${{ matrix.ARCH }} GOOS=${{ matrix.OS }} go build
@@ -86,11 +81,6 @@ jobs:
     - uses: actions/checkout@v1
       with:
         submodules: true
-    - name: Bundle assets with pkger
-      run: |
-        go get github.com/markbates/pkger/cmd/pkger
-        $env:Path += ";C:\Users\runneradmin\go\bin"
-        pkger
     - name: Build binary for ${{ matrix.version }}
       run: |
         $Env:GOOS = "${{ matrix.OS }}"

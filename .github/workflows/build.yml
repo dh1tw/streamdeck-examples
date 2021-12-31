@@ -34,7 +34,7 @@ jobs:
     - name: Build binary for ${{ matrix.version }}
       run: |
         docker run --rm -v $PWD:/usr/src/myapp -w /usr/src/myapp dh1tw/remoteaudio-xcompile:linux-armhf \
-        /bin/sh -c 'apt-get update && apt-get install -y libusb-1.0-0-dev:${{ LINUX_ARCH }} && go build'
+        /bin/sh -c 'apt-get update && apt-get install -y libusb-1.0-0-dev:${{ matrix.LINUX_ARCH }} && go build'
     - name: Prepare build artifact for stashing
       run: |
         mkdir release

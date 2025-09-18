@@ -129,9 +129,11 @@ func icons(cmd *cobra.Command, args []string) {
 
 	lightbulb := false
 
-	onPressedCb := func(btnIndex int, state sdeck.BtnState) {
+	onPressedCb := func(s sdeck.State, e sdeck.Event) {
+		state := e.Kind
+		btnIndex := e.Which
 		fmt.Printf("Button: %d, %s\n", btnIndex, state)
-		if btnIndex == 0 && state == sdeck.BtnPressed {
+		if btnIndex == 0 && state == sdeck.EventKeyPressed {
 			if lightbulb {
 				if err := sd.FillImage(0, lightbulbOff); err != nil {
 					log.Panic(err)

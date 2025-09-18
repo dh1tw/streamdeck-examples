@@ -2,11 +2,8 @@ package cmd
 
 import (
 	"html/template"
-	"log"
-	"os"
 
-	"github.com/dh1tw/hid"
-	sd "github.com/dh1tw/streamdeck"
+	"github.com/bearsh/hid"
 	"github.com/spf13/cobra"
 )
 
@@ -29,11 +26,11 @@ var tmpl = template.Must(template.New("").Parse(
 ))
 
 func enumerate(cmd *cobra.Command, args []string) {
-	streamdecks := deDuplicateHidDevices(hid.Enumerate(sd.VendorID, sd.ProductID))
+	// streamdecks := deDuplicateHidDevices(hid.Enumerate(sd.VendorID, sd.ProductID))
 
-	if err := tmpl.Execute(os.Stdout, streamdecks); err != nil {
-		log.Fatal(err)
-	}
+	// if err := tmpl.Execute(os.Stdout, streamdecks); err != nil {
+	// 	log.Fatal(err)
+	// }
 }
 
 // deDuplicateHidDevices removes duplicate HID devices based on the Serial Number.

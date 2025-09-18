@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"image/color"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"os/signal"
@@ -54,7 +54,7 @@ func textbtns(cmd *cobra.Command, args []string) {
 	}
 	defer _monoFont.Close()
 
-	data, err := ioutil.ReadAll(_monoFont)
+	data, err := io.ReadAll(_monoFont)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -82,14 +82,14 @@ func textbtns(cmd *cobra.Command, args []string) {
 		Text:      "PRESSED",
 	}
 
-	lineLongPressed := sdeck.TextLine{
-		Font:      monoFont,
-		FontColor: color.RGBA{255, 255, 0, 0}, // Yellow
-		FontSize:  14,
-		PosX:      12,
-		PosY:      30,
-		Text:      "LPRESSED",
-	}
+	// lineLongPressed := sdeck.TextLine{
+	// 	Font:      monoFont,
+	// 	FontColor: color.RGBA{255, 255, 0, 0}, // Yellow
+	// 	FontSize:  14,
+	// 	PosX:      12,
+	// 	PosY:      30,
+	// 	Text:      "LPRESSED",
+	// }
 
 	lineReleased := sdeck.TextLine{
 		Font:      monoFont,
@@ -105,10 +105,10 @@ func textbtns(cmd *cobra.Command, args []string) {
 		Lines:   []sdeck.TextLine{lineLabel, linePressed},
 	}
 
-	longPressedText := sdeck.TextButton{
-		BgColor: color.RGBA{0, 0, 0, 0},
-		Lines:   []sdeck.TextLine{lineLabel, lineLongPressed},
-	}
+	// longPressedText := sdeck.TextButton{
+	// 	BgColor: color.RGBA{0, 0, 0, 0},
+	// 	Lines:   []sdeck.TextLine{lineLabel, lineLongPressed},
+	// }
 
 	releasedText := sdeck.TextButton{
 		BgColor: color.RGBA{0, 0, 0, 0},
@@ -119,14 +119,16 @@ func textbtns(cmd *cobra.Command, args []string) {
 		sd.WriteText(i, releasedText)
 	}
 
-	btnEvtCb := func(btnIndex int, state sdeck.BtnState) {
+	btnEvtCb := func(s sdeck.State, e sdeck.Event) {
+		btnIndex := e.Which
+		state := e.Kind
 		fmt.Printf("Button: %d, %s\n", btnIndex, state)
 		switch state {
-		case sdeck.BtnPressed:
+		case sdeck.EventKeyPressed:
 			sd.WriteText(btnIndex, pressedText)
-		case sdeck.BtnLongPressed:
-			sd.WriteText(btnIndex, longPressedText)
-		case sdeck.BtnReleased:
+		// case sdeck.BtnLongPressed:
+		// 	sd.WriteText(btnIndex, longPressedText)
+		case sdeck.EventKeyReleased:
 			sd.WriteText(btnIndex, releasedText)
 		}
 	}

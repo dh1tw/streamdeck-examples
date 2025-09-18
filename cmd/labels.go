@@ -63,24 +63,24 @@ func labels(cmd *cobra.Command, args []string) {
 		labels[i] = label
 	}
 
-	handleBtnEvents := func(btnIndex int, state sdeck.BtnState) {
-		fmt.Printf("Button: %d, %s\n", btnIndex, state)
+	handleBtnEvents := func(state sdeck.State, ev sdeck.Event) {
+		// fmt.Printf("Button: %d, %s\n", btnIndex, state)
 		mu.Lock()
 		defer mu.Unlock()
-		switch state {
+		switch ev.Kind {
 
-		case sdeck.BtnPressed:
+		case sdeck.EventKeyPressed:
 			col := color.RGBA{0, 0, 153, 0} //blue
-			labels[btnIndex].SetBgColor(image.NewUniform(col))
-			labels[btnIndex].Draw()
-		case sdeck.BtnLongPressed:
-			col := color.RGBA{255, 255, 0, 0} //yellow
-			labels[btnIndex].SetBgColor(image.NewUniform(col))
-			labels[btnIndex].Draw()
-		case sdeck.BtnReleased:
+			labels[ev.Which].SetBgColor(image.NewUniform(col))
+			labels[ev.Which].Draw()
+		// case sdeck.BtnLongPressed:
+		// 	col := color.RGBA{255, 255, 0, 0} //yellow
+		// 	labels[btnIndex].SetBgColor(image.NewUniform(col))
+		// 	labels[btnIndex].Draw()
+		case sdeck.EventKeyReleased:
 			col := color.RGBA{0, 0, 0, 255} //black
-			labels[btnIndex].SetBgColor(image.NewUniform(col))
-			labels[btnIndex].Draw()
+			labels[ev.Which].SetBgColor(image.NewUniform(col))
+			labels[ev.Which].Draw()
 		}
 	}
 

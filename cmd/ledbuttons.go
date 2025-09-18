@@ -81,11 +81,21 @@ func ledbtns(cmd *cobra.Command, args []string) {
 		btns[i] = btn
 	}
 
-	btnChangedCb := func(btnIndex int, state sdeck.BtnState) {
-		fmt.Printf("Button: %d, %s\n", btnIndex, state)
-		if state == sdeck.BtnPressed {
-			btn := btns[btnIndex]
-			btn.SetState(!btn.State())
+	btnChangedCb := func(s sdeck.State, e sdeck.Event) {
+		btnIndex := e.Which
+		state := e.Kind
+		// fmt.Printf("Button: %d, %s\n", btnIndex, state)
+		btn := btns[btnIndex]
+		reDraw := false
+		switch state {
+		case sdeck.EventKeyPressed:
+			btn.SetState(true)
+			reDraw = true
+		case sdeck.EventKeyReleased:
+			btn.SetState(false)
+			reDraw = true
+		}
+		if reDraw {
 			if err := btn.Draw(); err != nil {
 				log.Fatal(err)
 			}
